@@ -4,11 +4,24 @@ import { Link } from '@inertiajs/react';
 
 export default function Home() {
   const [services, setServices] = useState([]);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    fetch('/api/services')
-      .then(res => res.json())
-      .then(setServices);
+    fetch('https://api.nailsbytanya.com/api/services')
+      .then(res => {
+        if (!res.ok) throw new Error("API not reachable");
+        return res.json();
+      })
+      .then(setServices)
+      .catch(err => {
+        console.error("API error:", err);
+        setError(true);
+        // fallback placeholder data
+        setServices([
+          { id: 1, title: 'Nail Art (Placeholder)', description: 'Sample design', price: 40 },
+          { id: 2, title: 'Acrylic Extensions (Placeholder)', description: 'Example service', price: 60 }
+        ]);
+      });
   }, []);
 
   return (
@@ -24,14 +37,21 @@ export default function Home() {
 
       <h2 className="text-xl font-semibold mb-4 text-maroon">Our Services</h2>
 
-      <div className="flex flex-wrap gap-4">
+      {error && (
+        <div className="text-sm text-red-600 mb-4">
+          Couldn't load live services. Showing sample data instead.
+        </div>
+      )}
+
+      <div className="grid gap-4">
         {services.map(service => (
           <Link
             key={service.id}
             href={`/service/${service.id}`}
-            className="inline-block px-4 py-2 rounded-lg text-maroon border border-maroon hover:bg-pink hover:shadow-md transition"
+            className="block p-4 rounded-lg shadow-lg backdrop-blur-sm bg-white/40 hover:bg-white/60 transition"
           >
-            <span className="font-semibold">{service.title}</span> – ${service.price}
+            <h3 className="text-lg font-bold text-maroon">{service.title}</h3>
+            <p className="text-sm text-maroon">${service.price}</p>
           </Link>
         ))}
       </div>

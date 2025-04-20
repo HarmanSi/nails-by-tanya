@@ -8,4 +8,4 @@ cmds = [
 ]
 
 [phases.start]
-cmd = "echo 'PORT=$PORT' > .env.port && cat .env.port >> .env && php artisan serve --host=0.0.0.0 --port=$PORT"
+cmd = "php artisan serve --host=0.0.0.0 --port=8080"

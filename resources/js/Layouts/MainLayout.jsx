@@ -6,7 +6,7 @@ export default function MainLayout({ children }) {
         backgroundImage: "url('/images/bg.jpg')",
       }}
       >
-        <div className="bg-white bg-opacity-50 min-h-screen p-6">
+        <div className="bg-white bg-opacity-30 min-h-screen p-6">
           {children}
         </div>
       </div>
